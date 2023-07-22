@@ -1,0 +1,159 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Web.Configuration;
+using System.Data;
+
+
+
+
+
+namespace CURD_OPS
+{
+public partial class Curd : System.Web.UI.Page
+{
+public static SqlConnection conn = new SqlConnection();
+protected void Page_Load(object sender, EventArgs e)
+{
+if (!(IsPostBack))
+{
+conn.ConnectionString = WebConfigurationManager.ConnectionStrings["connStr"].ToString();
+conn.Open();
+PopulateEmpDropDown();
+}
+}
+
+
+
+
+
+protected void Button1_Click(object sender, EventArgs e)
+{
+ReadData();
+}
+
+
+
+
+
+public void ReadData()
+{
+SqlCommand cmd = new SqlCommand("select * from Test1", conn);
+SqlDataAdapter sd = new SqlDataAdapter(cmd);
+DataTable dt = new DataTable();
+sd.Fill(dt);
+grv.DataSource = dt;
+grv.DataBind();
+
+
+
+
+
+}
+
+
+
+
+
+protected void Button2_Click(object sender, EventArgs e)
+{
+//string str = null;
+/* if (Male.Checked)
+{
+str = "male";
+}
+else
+{
+str = "female";
+}*/
+SqlCommand cmd = new SqlCommand("insert into Test1 (ID , FirstName , LastName ,Position , Age) values (" + int.Parse(TextBox5.Text) + ", '" + TextBox6.Text.ToString() + "','" + TextBox1.Text.ToString() + "','" + TextBox3.Text.ToString() + "'," + int.Parse(TextBox4.Text) + ")", conn);
+cmd.ExecuteNonQuery();
+PopulateEmpDropDown();
+Response.Write("<script>alert('Data Submited Sucessfully.')</script>");
+}
+
+
+
+
+protected void Button4_Click(object sender, EventArgs e)
+{
+TextBox1.Text = "";
+TextBox6.Text = "";
+TextBox3.Text = "";
+TextBox4.Text = "";
+TextBox5.Text = "";
+//Male.Checked = false;
+//female.Checked = false;
+}
+
+
+
+
+
+private void PopulateEmpDropDown()
+{
+try
+{
+string cmdStr = "Select id, FirstName from Test1";
+SqlDataAdapter da = new SqlDataAdapter(cmdStr, conn);
+DataTable dt = new DataTable();
+da.Fill(dt);
+DropDownList1.DataSource = dt;
+DropDownList1.DataBind();
+DropDownList1.DataTextField = "FirstName";
+DropDownList1.DataValueField = "id";
+DropDownList1.DataBind();
+}
+catch (Exception e1)
+{
+Response.Write(e1.Message);
+// MessageBox.Show(this, e1.Message);
+}
+
+
+
+
+
+}
+
+
+
+
+
+protected void Button5_Click(object sender, EventArgs e)
+{
+SqlCommand sc = new SqlCommand("delete from Test1 where id = " + DropDownList1.SelectedValue, conn);
+sc.ExecuteNonQuery();
+PopulateEmpDropDown();
+ReadData();
+Response.Write("<script>confirm('ARE YOU SURE TO DELETED THIS DATA.')</script>");
+
+
+
+
+
+}
+
+
+
+
+
+protected void Button3_Click(object sender, EventArgs e)
+{
+
+
+
+
+
+}
+}
+}
+
+
+<connectionStrings>
+<add name="connStr" connectionString="Data Source=LPCD-4FXP4B3\SQLEXPRESS;Initial Catalog=Training;User ID=sa;Password=Espire123" providerName="System.Data.SqlClient" />
+</connectionStrings>

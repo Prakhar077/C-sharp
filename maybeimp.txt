@@ -1,0 +1,146 @@
+/// <remarks> 
+/// Sample request: 
+/// 
+/// POST /Todo 
+/// { /// "id": 1, 
+/// "name": "Item1", 
+/// "isComplete": true 
+/// } 
+/// 
+/// </remarks>
+
+
+
+
+	[17:23] Suman Aich (Guest)
+using System.Collections.Generic;
+
+namespace DotnetWatch.Models
+
+{​​​​​
+
+public class Socials
+
+    {​​​​​
+
+        public int ID {​​​​​ get; set; }​​​​​
+
+        public string IconName {​​​​​ get; set; }​​​​​
+
+        public string IconBgColor {​​​​​ get; set; }​​​​​
+
+        public string IconTargetUrl {​​​​​ get; set; }​​​​​
+
+        public string IconClass {​​​​​ get; set; }​​​​​
+
+        public static List<Socials> AppSocials()
+
+        {​​​​​
+
+            List<Socials> icons = new List<Socials>();
+
+            icons.Add(new Socials {​​​​​ ID = 1, IconName = "Google", IconBgColor = "#dd4b39",IconTargetUrl="www.google.com", IconClass="fa fa-google" }​​​​​);
+
+            icons.Add(new Socials {​​​​​ ID = 2, IconName = "Facebook", IconBgColor = "#3B5998", IconTargetUrl="www.facebook.com", IconClass="fa fa-facebook" }​​​​​);
+
+            icons.Add(new Socials {​​​​​ ID = 3, IconName = "Linked In", IconBgColor = "#007bb5", IconTargetUrl = "www.linkedin.com", IconClass= "fa fa-fa-linkedin" }​​​​​);
+
+            icons.Add(new Socials {​​​​​ ID = 4, IconName = "YouTube", IconBgColor = "#007bb5", IconTargetUrl = "www.youtube.com", IconClass="fa fa-youtube" }​​​​​);
+
+            icons.Add(new Socials {​​​​​ ID = 5, IconName = "Twitter", IconBgColor = "#55acee", IconTargetUrl = "www.twitter.com",IconClass="fa fa-twitter" }​​​​​);
+
+            return icons;
+
+        }​​​​​
+
+    }​​​​​
+
+}​​​​​
+
+
+
+
+
+
+using System.Collections.Generic;
+namespace DotnetWatch.Models
+{
+public class Socials
+    {
+        public int ID { get; set; }
+        public string IconName { get; set; }
+        public string IconBgColor { get; set; }
+        public string IconTargetUrl { get; set; }
+        public string IconClass { get; set; }
+
+        public static List<Socials> AppSocials()
+        {
+            List<Socials> icons = new List<Socials>();
+            icons.Add(new Socials { ID = 1, IconName = "Google", IconBgColor = "#dd4b39",IconTargetUrl="www.google.com", IconClass="fa fa-google" });
+            icons.Add(new Socials { ID = 2, IconName = "Facebook", IconBgColor = "#3B5998", IconTargetUrl="www.facebook.com", IconClass="fa fa-facebook" });
+            icons.Add(new Socials { ID = 3, IconName = "Linked In", IconBgColor = "#007bb5", IconTargetUrl = "www.linkedin.com", IconClass= "fa fa-fa-linkedin" });
+            icons.Add(new Socials { ID = 4, IconName = "YouTube", IconBgColor = "#007bb5", IconTargetUrl = "www.youtube.com", IconClass="fa fa-youtube" });
+            icons.Add(new Socials { ID = 5, IconName = "Twitter", IconBgColor = "#55acee", IconTargetUrl = "www.twitter.com",IconClass="fa fa-twitter" });
+
+            return icons;
+        }
+    }
+}
+
+
+
+using Microsoft.AspNetCore.Mvc;
+using DotnetWatch.Models;
+ 
+namespace DotnetWatch.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    public class SocialController: Controller
+    {
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View();
+        }
+ 
+    }
+}
+
+
+
+
+using DotnetWatch.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+public class SocialsVViewComponent : ViewComponent
+   {
+       List<Socials> socials = new List<Socials>();
+       public SocialsVViewComponent()
+       {
+           socials = Socials.AppSocials();
+       }
+
+       public async Task<IViewComponentResult> InvokeAsync()
+       {
+           var model = socials;
+           return await Task.FromResult((IViewComponentResult)View("SocialsV", model));
+       }
+
+   }
+   
+   
+   
+   
+   @model IList<DotnetWatch.Models.Socials>   
+
+<div class="col-md-12" style="padding-top:50px;">   
+    @foreach (var icon in Model)   
+    {   
+        <a style="background:@icon.IconBgColor" href="@icon.IconTargetUrl">   
+            <i class="@icon.IconClass"></i>   
+            @icon.IconName   
+        </a>   
+    }   
+</div>

@@ -1,0 +1,259 @@
+<connectionStrings>
+<add name="connStr" connectionString="Data Source=LPCD-CTNP4B3;Initial Catalog=Training;User ID=sa;Password=Espire123" providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="efcrudproject.aspx.cs" Inherits="efcrud.efcrudproject" %>
+
+<connectionStrings>
+<add name="connStr" connectionString="Data Source=LPCD-CTNP4B3;Initial Catalog=Training;User ID=sa;Password=Espire123" providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+
+
+<form id="form1" runat="server">
+<div style="height: 620px; margin-left: 40px; background-color: #FFCC66; color: #0000FF;" aria-orientation="horizontal">
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;CURD OPERATION</h1>
+<br />
+<br />
+<br />
+FirstName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button1" runat="server" BackColor="White" BorderColor="Black" Text="GET DATA" OnClick="Button1_Click" ForeColor="Red" />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<asp:Button ID="Button3" runat="server" BackColor="White" Text="UPDATE" />
+&nbsp;&nbsp;&nbsp;
+<asp:Button ID="Button2" runat="server" BackColor="White" Text="INSERT" OnClick="Button2_Click" style="margin-left: 0px" Width="99px" />
+&nbsp;&nbsp;&nbsp;
+<br />
+ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<asp:Button ID="Button4" runat="server" BackColor="#FFCC66" Text="CLEAR" OnClick="Button4_Click" />
+&nbsp;&nbsp;
+<br />
+Position:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+Age:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+&nbsp;&nbsp;&nbsp;
+<div><br />
+Enter Id for deleat:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:DropDownList ID="DropDownList1" runat="server" Height="30px" Width="120px">
+</asp:DropDownList>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<asp:TextBox ID="TextBox7" runat="server"></asp:TextBox>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<asp:Button ID="Button5" runat="server" BackColor="#CC0000" Text="Delete" OnClick="Button5_Click" />
+</div><br />
+<br />
+<br />
+<br />
+<br />
+<asp:GridView ID="grv" runat="server" Height="82px" Width="822px">
+
+
+
+
+
+</asp:GridView>
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+</form>
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Web.Configuration;
+using System.Data;
+using curdoperation1;
+
+
+
+namespace CURD_OPS
+{
+public partial class Curd : System.Web.UI.Page
+{
+private TrainingEntities1 tef = new TrainingEntities1();
+public static SqlConnection conn = new SqlConnection();
+protected void Page_Load(object sender, EventArgs e)
+{
+if (!(IsPostBack))
+{
+conn.ConnectionString = WebConfigurationManager.ConnectionStrings["connStr"].ToString();
+conn.Open();
+bool re = PopulateEmpDropDown();
+}
+}
+
+
+
+public void datafill()
+{
+this.grv.DataSource = tef.TESTs.Select(
+ac => new
+{
+Name = ac.Name,
+EId = ac.EId,
+
+
+
+Desig = ac.Desig,
+Age = ac.Age
+
+
+
+}
+)
+.ToList();
+this.grv.DataBind();
+}
+
+
+
+
+
+
+
+
+protected void Button1_Click(object sender, EventArgs e)
+{
+
+
+
+datafill();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+protected void Button2_Click(object sender, EventArgs e)
+{
+//string str = null;
+/* if (Male.Checked)
+{
+str = "male";
+}
+else
+{
+str = "female";
+}*/
+// SqlCommand cmd = new SqlCommand("insert into Test1 (ID , FirstName , LastName ,Position , Age) values (" + int.Parse(TextBox5.Text) + ", '" + TextBox6.Text.ToString() + "','" + TextBox1.Text.ToString() + "','" + TextBox3.Text.ToString() + "'," + int.Parse(TextBox4.Text) + ")", conn);
+// cmd.ExecuteNonQuery();
+PopulateEmpDropDown();
+Response.Write("<script>alert('Data Submited Sucessfully.')</script>");
+}
+
+
+
+
+
+
+
+
+protected void Button4_Click(object sender, EventArgs e)
+{
+
+
+
+TextBox6.Text = "";
+TextBox3.Text = "";
+TextBox4.Text = "";
+TextBox5.Text = "";
+//Male.Checked = false;
+//female.Checked = false;
+}
+
+
+
+
+
+
+
+
+
+private bool PopulateEmpDropDown()
+{
+using (var DbContext = new TrainingEntities1())
+{
+DataTable dt = new DataTable();
+dt.Columns.Add("EId");
+dt.Columns.Add("Name");
+foreach (TEST obj in DbContext.TESTs)
+dt.Rows.Add(new Object[] { obj.EId, obj.Name });
+
+
+
+DropDownList1.DataSource = dt;
+DropDownList1.DataBind();
+DropDownList1.DataTextField = "Name";
+DropDownList1.DataValueField = "EId";
+DropDownList1.DataBind();
+}
+return true;
+}
+
+
+
+protected void Button5_Click(object sender, EventArgs e)
+{
+using (var DbContext = new TrainingEntities1())
+{
+var emp = DbContext.TESTs.Find(Int32.Parse(TextBox7.Text));
+DbContext.TESTs.Remove(emp);
+Response.Write("<script>alert('Data Submited Sucessfully.')</script>");
+DbContext.SaveChanges();
+datafill();
+}
+
+
+
+}
+}
+/*
+protected void Button5_Click(object sender, EventArgs e)
+{
+SqlCommand sc = new SqlCommand("delete from Test1 where id = " + DropDownList1.SelectedValue, conn);
+sc.ExecuteNonQuery();
+PopulateEmpDropDown();
+ReadData();
+Response.Write("<script>confirm('ARE YOU SURE TO DELETED THIS DATA.')</script>");
+
+
+
+
+
+
+
+
+}
+*/
+
+
+
+}

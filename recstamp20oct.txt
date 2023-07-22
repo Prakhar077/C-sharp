@@ -1,0 +1,66 @@
+
+  
+  rec.stamp-3-3:30 hrs  20 oct
+  rec stam 6-6:30 20 oct  
+   public abstract class AppController : Controller
+    {
+        private TrainingEntities _AppContext = new TrainingEntities();
+        public TrainingEntities AppContext { get { return _AppContext; } }
+ 
+        public AppController()
+        {
+            ViewData["projects"] = from c in AppContext.Projects select c;
+        }
+ 
+    }
+	
+	 public class LogActionFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            Logger("OnActionExecuting", filterContext.RouteData);
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            Logger("OnActionExecuted", filterContext.RouteData);
+        }
+
+        public override void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            Logger("OnResultExecuting", filterContext.RouteData);
+        }
+
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            Logger("OnResultExecuted", filterContext.RouteData);
+        }
+		
+		
+		[HandleError]
+
+
+        public ActionResult CustomException()
+
+        {​​​​​
+
+            /*
+
+            String str = null;
+
+            String subStr = str.Substring(0, 1);
+
+            */
+
+            int a = 10;
+
+            int b = 0;
+
+            int i = a / b;
+
+            //throw new Exception("This is unhandled exception");
+
+            return View();
+
+        }​​​​​
+
